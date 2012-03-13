@@ -30,9 +30,16 @@ class SimpleStepTest extends \PHPUnit_Framework_TestCase {
     {   
         $this->setExpectedException('InvalidArgumentException');
         $this->step = new SimpleStep(null);
-        $this->step->getDescription();
     }
     
+        
+    public function testReadIfItIsNotNew()
+    {   
+        $this->setExpectedException('BadMethodCallException');
+        $this->step = new SimpleStep('my description of step');
+        $this->step->read();
+        $this->step->read();
+    }    
     
 }
 
