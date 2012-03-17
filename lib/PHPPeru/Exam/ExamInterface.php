@@ -36,6 +36,7 @@ interface ExamInterface extends Iterator
 
     /**
      * Create exam evaluation
+     *	
      * @return Evaluation
      * @throws BadMethodCallException if the exam can't be evaluated
      */
@@ -80,5 +81,4 @@ interface ExamInterface extends Iterator
      */
     public function isCompleted();
 
-    
 }
