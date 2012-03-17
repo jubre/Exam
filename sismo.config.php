@@ -34,7 +34,7 @@ $message = <<<MESSAGE
     %output%
 MESSAGE;
 
-$emailNotifier = new Sismo\Contrib\MailNotifier('cordoval@gmail.com', $subject, $message);
+$emailNotifier = new Sismo\Notifier\MailNotifier('cordoval@gmail.com', $subject, $message);
 $sf2->addNotifier($emailNotifier);
 
 return $sf2;
