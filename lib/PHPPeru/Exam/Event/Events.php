@@ -52,4 +52,15 @@ abstract class Events
      * @var string
      */
     const onCompleteExam = 'exam.complete';
+    
+    /*
+     * The step.read event is thrown each time a step is read
+     * in the system.
+     *
+     * The event listener receives an PHPPeru\Exam\Event\StepEvent
+     * instance.
+     *
+     * @var string
+     */
+    const onReadStep = 'step.read';
 }

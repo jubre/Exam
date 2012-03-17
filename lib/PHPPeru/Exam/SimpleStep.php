@@ -2,6 +2,12 @@
 
 namespace PHPPeru\Exam;
 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface,
+    Symfony\Component\EventDispatcher\EventDispatcher,
+    BadMethodCallException;
+use PHPPeru\Exam\Event\Events;
+use PHPPeru\Exam\StepEvent;
+
 /**
  * Description of SimpleStep
  *
@@ -9,20 +15,45 @@ namespace PHPPeru\Exam;
  */
 class SimpleStep implements StepInterface {
 
-    protected $status;
+    const STATUS_NEW       = 0;
+    const STATUS_READ      = 1;
+    const STATUS_ANSWERED  = 2;
+    
+    const EVENT_READ       = 'read';
+    const EVENT_ANSWER     = 'answer';
+    
+    protected $status = self::STATUS_NEW;
     protected $description;
 
-    const STATUS_NEW = 0;
-    const STATUS_READ = 1;
-    const STATUS_ANSWERED = 2;
-
+    /**
+     * Event dispatcher used internally to trigger events during lifecycle
+     *
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;    
+    
+    /**
+     * Default constructor, initializes events 
+     */
     public function __construct($description) {       
+        $this->eventDispatcher = new EventDispatcher();
         $this->setDescription($description);
+    }    
+
+    /**
+     * {@inheritdoc}
+     */
+    public function read() {
+        if (!$this->isNew()) {
+            throw new BadMethodCallException('Step is not new');
+        }        
+        $this->setStatus(self::STATUS_READ);
+        $this->eventDispatcher->dispatch(Events::onReadStep, new StepEvent($this));
     }
     
-    private function setDescription($description)
-    {
-        if( !empty($description) && empty($this->description ) )
+    
+    private function setDescription($description) {
+        if( !empty($description) ) 
         {
             $this->description = $description;
         }
