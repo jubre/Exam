@@ -1,6 +1,6 @@
 <?php
 
-$notifier = new Sismo\DBusNotifier();
+$notifier = new Sismo\Notifier\DBusNotifier();
 
 // add a project with custom settings
 $sf2 = new Sismo\Project('exam');
@@ -19,6 +19,23 @@ $sf2->setCommand($longCommand);
 $sf2->setSlug('exam');
 $sf2->setUrlPattern('http://localhost:8000/?p=.git;a=commitdiff;h=%commit%');
 $sf2->addNotifier($notifier);
+
+$subject = '[%status_code%] %name% (%short_sha%)';
+$message = <<<MESSAGE
+  Build status changed to %STATUS%.
+
+    commit: %sha%
+    Author: %author%
+
+    %message%
+
+    Sismo reports:
+
+    %output%
+MESSAGE;
+
+$emailNotifier = new Sismo\Contrib\MailNotifier('cordoval@gmail.com', $subject, $message);
+$sf2->addNotifier($emailNotifier);
 
 return $sf2;
 
